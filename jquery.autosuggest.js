@@ -204,13 +204,17 @@
 					//look up suggestions
 					var suggestions = findSuggestions(eventObject.target.value, items.list);
 
-					if(suggestions.length > 0){
+					if(suggestions.identical.length > 0){
 						if (typeahead === true && settings.typeAhead === true) {
-							typeAhead(suggestions[0]);
+							typeAhead(suggestions.identical[0]);
 						}
-						showSuggestions(suggestions);			
+						showSuggestions(suggestions.identical.concat(suggestions.similar));			
 					}
-					else{
+					else if(suggestions.similar.length > 0){
+						showSuggestions(suggestions.similar);
+					}
+					else {
+						//no matches
 						hideSuggestions();
 					}
 
@@ -221,15 +225,6 @@
 				}
 
 			}
-
-			if (items.length > 0) {
-
-
-			} 
-			else {
-				//there is nothing to do
-			}
-
 
 		}
 
