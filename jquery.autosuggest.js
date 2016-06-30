@@ -73,7 +73,8 @@
 			provider: null,
 			ajaxurl: null,
 			localStorage: true,
-			suggestionsList: null
+			suggestionsList: null,
+			limit: 10
 
 		}, options);
 
@@ -199,7 +200,7 @@
 			else {
 
 				if (items.list.length > 0) {
-					
+
 					//look up suggestions
 					var suggestions = findSuggestions(eventObject.target.value, items.list);
 
@@ -648,17 +649,27 @@
 		 */
 		function findSuggestions(input, items){
 
-			var suggestions = [];
+			var suggestions = {
+				identical: [],
+				similar: []
+			};
+
 			//find suggestions
 			var regex = new RegExp(input, "gi");
 
 			if (input.length > 0) {
-				for(var item in items){
-					var string = items[item].first_name + " " + items[item].last_name;
 
-					if ( regex.test(string) == true) {
-						suggestions.push(items[item].first_name + " " + items[item].last_name);
-					}			
+				while( ((suggestions.identical.length + suggestions.similar.length) != settings.limit) && items.length != 0){
+
+					var item = items.shift();
+
+					if (item.indexOf(input) == 0) {
+						suggestions.identical.push(item);
+					} 
+					else if (regex.test(item) == true) {
+						suggestions.similar.push(item);
+					}
+
 				}
 
 			}
