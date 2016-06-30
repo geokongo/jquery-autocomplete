@@ -8,4 +8,3 @@ This is a jquery plugin the provides suggests to an input box based on the chara
 ![image](https://cloud.githubusercontent.com/assets/8317735/16492536/d3947d9a-3eea-11e6-9081-09466ec3c38d.png)
 ![image](https://cloud.githubusercontent.com/assets/8317735/16492541/d39be4e0-3eea-11e6-8e31-663241a90c70.png)
 ![image](https://cloud.githubusercontent.com/assets/8317735/16492538/d3966d3a-3eea-11e6-805a-c77f979de5e4.png)
-![image](https://cloud.githubusercontent.com/assets/8317735/16492539/d3981086-3eea-11e6-83ed-2acec2c442a1.png)
