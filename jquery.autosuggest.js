@@ -45,6 +45,11 @@
 	 *@var {} The window localStorage object
 	 */
 	var store = window.localStorage;
+
+	/**
+	 *@var bool true|false Defines whether typeAhead functionality is allowed for this particular keypress
+	 */
+	var isTypeAheadKey;
 	
 	var timestamp = 'users-suggestions-timestamp-7766';
 	var storedata = 'users-suggestions-data-7766';
@@ -166,12 +171,15 @@
 
 			}
 		}
+
 		/**
 		 *This method provides the first suggestion for autocomplete type ahead
 		 *@param [] suggestions Array of the available suggestions
 		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
 		 */
 		function doSuggest(typeahead){
+
+			isTypeAheadKey = typeahead;
 
 			//get the data
 			var items = getData();
@@ -224,6 +232,39 @@
 					hideSuggestions();
 				}
 
+			}
+
+		}
+		/**
+		 *This method provides the first suggestion for autocomplete type ahead
+		 *@param [] suggestions Array of the available suggestions
+		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
+		 */
+		function doSuggestForAjax(data){
+
+			if (data.length > 0) {
+
+				//look up suggestions
+				var suggestions = findSuggestions(eventObject.target.value, data);
+
+				if(suggestions.identical.length > 0){
+					if (isTypeAheadKey === true && settings.typeAhead === true) {
+						typeAhead(suggestions.identical[0]);
+					}
+					showSuggestions(suggestions.identical.concat(suggestions.similar));			
+				}
+				else if(suggestions.similar.length > 0){
+					showSuggestions(suggestions.similar);
+				}
+				else {
+					//no matches
+					hideSuggestions();
+				}
+
+			} 
+			else {
+				//no data
+				hideSuggestions();
 			}
 
 		}
@@ -500,7 +541,7 @@
 								//get fresh data
 								$.ajax({
 
-									url: ajaxurl,
+									url: settings.ajaxurl,
 									type: 'GET',
 									dataType: 'json',
 									success: function(response){
@@ -550,7 +591,7 @@
 							//yes storage, no data, yes internet - get data
 							$.ajax({
 
-								url: ajaxurl,
+								url: settings.ajaxurl,
 								type: 'GET',
 								dataType: 'json',
 								success: function(response){
@@ -591,15 +632,12 @@
 						
 						$.ajax({
 
-							url: ajaxurl,
+							url: settings.ajaxurl,
 							type: 'GET',
+							async: false,
 							dataType: 'json',
 							success: function(response){
-
-								return {
-									userdefined: false,
-									list: response
-								};
+								doSuggestForAjax(response);
 							},
 							error: function(err){
 								//there was an error
