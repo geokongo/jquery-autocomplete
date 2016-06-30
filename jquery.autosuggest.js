@@ -411,16 +411,28 @@
 
 					switch(namespaces.length){
 						case 4:
-							return window[namespaces[0]][namespaces[1]][namespaces[2]][namespaces[3]](eventObject.target.value);
+							return {
+								userdefined: true,
+								list: window[namespaces[0]][namespaces[1]][namespaces[2]][namespaces[3]](eventObject.target.value)
+							};
 							break;
 						case 3:
-							return window[namespaces[0]][namespaces[1]][namespaces[2]](eventObject.target.value);
+							return {
+								userdefined: true,
+								list: window[namespaces[0]][namespaces[1]][namespaces[2]](eventObject.target.value)
+							};
 							break;
 						case 2:
-							return window[namespaces[0]][namespaces[1]](eventObject.target.value);
+							return {
+								userdefined: true,
+								list: window[namespaces[0]][namespaces[1]](eventObject.target.value)
+							};
 							break;
 						case 1:
-							return window[provider](eventObject.target.value);
+							return {
+								userdefined: true,
+								list: window[provider](eventObject.target.value)
+							};
 							break;
 					}
 
