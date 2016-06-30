@@ -175,20 +175,54 @@
 			//get the data
 			var items = getData();
 
-			if (items.length > 0) {
+			if (items.userdefined === true) {
 
-				//look up suggestions
-				var suggestions = findSuggestions(eventObject.target.value, items);
+				if (items.list.length > 0) {
 
-				if(suggestions.length > 0){
-					if (typeahead === true && settings.typeAhead === true) {
-						typeAhead(suggestions[0]);
+					if(typeahead === true && settings.typeAhead === true){
+						
+						typeAhead(items.list[0]);
+						showSuggestions(items.list);
+
 					}
-					showSuggestions(suggestions);			
-				}
-				else{
+					else{
+						showSuggestions(items.list);
+					}
+
+				} 
+				else {
+					//no data
 					hideSuggestions();
 				}
+
+			} 
+			else {
+
+				if (items.list.length > 0) {
+					
+					//look up suggestions
+					var suggestions = findSuggestions(eventObject.target.value, items.list);
+
+					if(suggestions.length > 0){
+						if (typeahead === true && settings.typeAhead === true) {
+							typeAhead(suggestions[0]);
+						}
+						showSuggestions(suggestions);			
+					}
+					else{
+						hideSuggestions();
+					}
+
+				} 
+				else {
+					//no data
+					hideSuggestions();
+				}
+
+			}
+
+			if (items.length > 0) {
+
 
 			} 
 			else {
