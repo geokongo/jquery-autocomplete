@@ -442,7 +442,10 @@
 			//check if any suggestions list array was provided
 			else if (settings.suggestionsList !== null) {
 
-				return findSuggestions(eventObject.target.value, settings.suggestionsList);
+				return {
+					userdefined: false,
+					list: settings.suggestionsList
+				};
 
 			} 
 			//check if ajax url is provided and fetch data
@@ -471,14 +474,22 @@
 									type: 'GET',
 									dataType: 'json',
 									success: function(response){
+
 										var now = new Date();
 										store.setItem(storedata, JSON.stringify(response));
 										store.setItem(timestamp, now.toISOString());
 
-										return response;
+										return {
+											userdefined: false,
+											list: response
+										};
 									},
 									error: function(err){
 										//there was an error
+										return {
+											userdefined: false,
+											list: []
+										};
 										console.error('There was an error with the ajax request in jquery.autosuggest');
 									}
 
@@ -487,13 +498,19 @@
 							} 
 							//no internet? use available data
 							else {
-								return JSON.parse(store.getItem(storedata));	
+								return {
+									userdefined: false,
+									list: JSON.parse(store.getItem(storedata))
+								};	
 							}
 						} 
 						//store data is up to data? use it
 						else {
 							//use current data
-							return JSON.parse(store.getItem(storedata));
+							return {
+								userdefined: false,
+								list: JSON.parse(store.getItem(storedata))
+							};
 						}
 
 					} 
@@ -511,9 +528,16 @@
 									store.setItem(storedata, JSON.stringify(response));
 									store.setItem(timestamp, now.toISOString());
 
-									return response;
+									return {
+										userdefined: false,
+										list: response
+									};
 								},
 								error: function(error){
+									return {
+										userdefined: false,
+										list: []
+									};
 									console.error('There was an error with the ajax request in jquery.autosuggest');
 								}
 
@@ -523,7 +547,10 @@
 						else {
 							//yes storage, no data, no internet
 							console.error("jquery.autosuggest can't fetch data - you are currently offline!");
-							return [];
+							return {
+								userdefined: false,
+								list: []
+							};
 						}
 					}
 				} 
@@ -539,11 +566,18 @@
 							dataType: 'json',
 							success: function(response){
 
-								return response;
+								return {
+									userdefined: false,
+									list: response
+								};
 							},
 							error: function(err){
 								//there was an error
-								console.log('There was an error with the ajax request');
+								return {
+									userdefined: false,
+									list: []
+								};
+								console.error('There was an error with the ajax request in jquery.autosuggest!');
 							}
 
 						});
@@ -551,15 +585,22 @@
 					} 
 					else {
 						//no storage, not internet - Just return nothing
-						return [];
+						return {
+							userdefined: false,
+							list: []
+						};
+						console.error("You are not connected to the internet - jquery.autosuggest!");
 					}
 				}
 
 			}
 			//if none of the above - do nothing!
 			else {
+				return {
+					userdefined: false,
+					list: []
+				};
 				console.error("No data source provided for jquery.autosuggest!");
-				return [];
 			} 
 
 		}
