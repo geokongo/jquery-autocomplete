@@ -1,0 +1,36 @@
+{
+    "name": "Autosuggest",
+    "title": "jQuery Autosuggest Plugin",
+    "description": "jQuery plugin for text input auto suggest and auto complete and type ahead for great user experience during text input.",
+    "keywords": [
+        "autosuggest",
+        "autocomplete",
+        "type ahead"
+        "jquery plugin"
+    ],
+    "version": "0.0.1",
+    "author": {
+        "name": "Geoffrey Bans",
+        "url": "http://geoffreyoliver.com"
+    },
+    "maintainers": [
+        {
+            "name": "Geoffrey Bans",
+            "email": "geoffreybans@gmail.com",
+            "url": "http://geoffreyoliver.com"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/GeoffreyOliver/jquery-autosuggest/blob/master/LICENSE"
+        }
+    ],
+    "bugs": "https://github.com/GeoffreyOliver/jquery-autosuggest/issues",
+    "homepage": "https://github.com/GeoffreyOliver/jquery-autosuggest",
+    "docs": "https://github.com/GeoffreyOliver/jquery-autosuggest",
+    "download": "http://code.jquery.com/#color",
+    "dependencies": {
+        "jquery": ">=1.5"
+    }
+}
