@@ -1,5 +1,5 @@
 /*!
- * jQuery AutoSuggest Plugin v1.0.0
+ * jQuery AutoSuggest Plugin v1.1.0
  * https://github.com/GeoffreyOliver/jquery-autosuggest
  * 
  * This plugin provides autosuggestion while typing into a textbox input field
@@ -606,13 +606,15 @@
 		}
 
 		/**
-		 *This method finds and returns suggestions based on the user input.
+		 * This method finds and returns suggestions based on the user input.
 		 *
-		 *@param String input The user's text input.
-		 *@param [] items The array of items to use for matching suggestions.
-		 *@return [] Array of matched suggestions
+		 * @param String input The user's text input.
+		 * @param [] items The array of items to use for matching suggestions.
+		 * @return [] Array of matched suggestions
+		 *
 		 */
 		function findSuggestions(input, items){
+
 
 			var suggestions = {
 				identical: [],
@@ -620,23 +622,36 @@
 			};
 
 			//find suggestions
-			var regex = new RegExp(input, "gi");
+			var regex = new RegExp(escapeString(input), "i");
 
 			if (input.length > 0) {
 
-				while( ((suggestions.identical.length + suggestions.similar.length) != settings.limit) && items.length != 0){
+				while( ((suggestions.identical.length) != settings.limit) && items.length != 0){
 
 					var item = items.shift();
 
 					if (item.indexOf(input) == 0) {
 						suggestions.identical.push(item);
 					} 
-					else if (regex.test(item) == true) {
+					else if (item.search(regex) == 0) {
+						suggestions.similar.unshift(item);
+					}
+					else if(item.search(regex) !== -1){
 						suggestions.similar.push(item);
 					}
 
 				}
 
+
+			}
+
+			if (suggestions.identical.length == settings.limit) {
+				
+				suggestions.similar = []; //remove the similar matches
+			
+			} 
+			else {
+				suggestions.similar = suggestions.similar.slice(0,(settings.limit - suggestions.identical.length));
 			}
 
 			return suggestions;
@@ -658,6 +673,15 @@
 		        a[j] = x;
 		    }
 
+		}
+
+		/**
+		 * This method escapes special characters in a string
+		 * @param String input The input string to be escaped
+		 * @return String The output string after escaping
+		 */
+		function escapeString(input){
+			return input.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 		}
 
 	};
