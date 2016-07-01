@@ -1,5 +1,5 @@
 /*!
- * jQuery AutoSuggest Plugin v1.1.0
+ * jQuery AutoSuggest Plugin v1.2.0
  * https://github.com/GeoffreyOliver/jquery-autosuggest
  * 
  * This plugin provides autosuggestion while typing into a textbox input field
@@ -54,7 +54,6 @@
 	//plugin definition
 	$.fn.autosuggest = function(options){
 		
-		textbox = $(this)[0];
 		createDropdown();
 
 		//setting the default options
@@ -73,6 +72,7 @@
 		//set the keydown event listeners
 		$(this).on('keydown', function(event){
 			
+			textbox = event.target;
 			handleKeydown(event)
 
 		});
@@ -80,6 +80,7 @@
 		//set the keyup event lister
 		$(this).on('keyup', function(event){
 			
+			textbox = event.target;
 			handleKeyup(event);
 
 		});
@@ -87,6 +88,7 @@
 		//set the blur event listener
 		$(this).on('blur', function(event){
 			
+			textbox = event.target;
 			hideSuggestions();
 
 		});
@@ -288,7 +290,7 @@
 			layer = document.createElement("div");
 			layer.className = "suggestions";
 			layer.style.visibility = "hidden";
-			layer.style.width = textbox.offsetWidth + "px";
+			//layer.style.width = textbox.offsetWidth + "px";
 
 			document.body.appendChild(layer);
 
@@ -358,6 +360,7 @@
 		function showSuggestions(suggestions){
 			var div = null;
 			layer.innerHTML = "";
+			layer.style.width = textbox.offsetWidth + "px";
 
 			//loop through the suggestions array adding one at a time
 			for( var i = 0; i < suggestions.length; i++){
