@@ -78,6 +78,7 @@
 			provider: null,
 			ajaxurl: null,
 			localStorage: true,
+			sessionStorage: false,
 			suggestionsList: null,
 			limit: 10
 
@@ -556,12 +557,12 @@
 										};
 									},
 									error: function(err){
+										console.error('There was an error with the ajax request in jquery.autosuggest');
 										//there was an error
 										return {
 											userdefined: false,
 											list: []
 										};
-										console.error('There was an error with the ajax request in jquery.autosuggest');
 									}
 
 								});
@@ -605,11 +606,11 @@
 									};
 								},
 								error: function(error){
+									console.error('There was an error with the ajax request in jquery.autosuggest');
 									return {
 										userdefined: false,
 										list: []
 									};
-									console.error('There was an error with the ajax request in jquery.autosuggest');
 								}
 
 							});
@@ -641,11 +642,11 @@
 							},
 							error: function(err){
 								//there was an error
+								console.error('There was an error with the ajax request in jquery.autosuggest!');
 								return {
 									userdefined: false,
 									list: []
 								};
-								console.error('There was an error with the ajax request in jquery.autosuggest!');
 							}
 
 						});
@@ -653,22 +654,22 @@
 					} 
 					else {
 						//no storage, not internet - Just return nothing
+						console.error("You are not connected to the internet - jquery.autosuggest!");
 						return {
 							userdefined: false,
 							list: []
 						};
-						console.error("You are not connected to the internet - jquery.autosuggest!");
 					}
 				}
 
 			}
 			//if none of the above - do nothing!
 			else {
+				console.error("No data source provided for jquery.autosuggest!");
 				return {
 					userdefined: false,
 					list: []
 				};
-				console.error("No data source provided for jquery.autosuggest!");
 			} 
 
 		}
