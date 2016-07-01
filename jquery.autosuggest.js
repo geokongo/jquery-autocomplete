@@ -67,7 +67,7 @@
 	//plugin definition
 	$.fn.autosuggest = function(options){
 		
-		textbox = $(this);
+		textbox = $(this)[0];
 		createDropdown();
 
 		//setting the default options
@@ -88,7 +88,6 @@
 		$(this).on('keydown', function(event){
 			
 			eventObject = event;
-			textbox = event.target;
 			handleKeydown(event)
 
 		});
@@ -99,7 +98,6 @@
 			eventObject = event;
 			layer.style.width = event.target.offsetWidth + "px";
 
-			textbox = event.target;
 			//alert(textbox.offsetWidth);
 			var keyed = handleKeyup(event);
 
@@ -115,7 +113,6 @@
 		$(this).on('blur', function(event){
 			
 			eventObject = event;
-			textbox = event.target;
 			hideSuggestions();
 
 		});
