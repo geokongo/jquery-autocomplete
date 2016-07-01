@@ -1,5 +1,5 @@
 /*!
- * jQuery AutoSuggest Plugin v0.0.1
+ * jQuery AutoSuggest Plugin v1.0.0
  * https://github.com/GeoffreyOliver/jquery-autosuggest
  * 
  * This plugin provides autosuggestion while typing into a textbox input field
@@ -59,7 +59,7 @@
 
 		//setting the default options
 		var settings = $.extend({
-			
+
 			suggestionsProvider: null,
 			sugggestionsArray: null,
 			typeAhead: true,
