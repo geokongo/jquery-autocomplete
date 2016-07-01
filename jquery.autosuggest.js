@@ -3,7 +3,7 @@
  * https://github.com/GeoffreyOliver/jquery-autosuggest
  * 
  * This plugin provides autosuggestion while typing into a textbox input field
- * It relies on a set of suggestions provided by the SuggestionsProvider module or ajax call
+ * It relies on a set of suggestions provided by the suggestionsProvider module or ajax call
  * If there are identical suggestions, it will attempt to type ahead of you.
  * 
  * Copyright 2015 - 2020 Geoffrey Bans
@@ -15,11 +15,6 @@
 	 *@var {} The event trigger targeted textbox
 	 */
 	var textbox;
-
-	/**
-	 *@var {} The suggestions provider
-	 */
-	var provider;
 
 	/**
 	 *@var {} The reference to the dropdown DOM div list
@@ -64,13 +59,12 @@
 
 		//setting the default options
 		var settings = $.extend({
-
-			suggesionsProvider: null,
+			
+			suggestionsProvider: null,
+			sugggestionsArray: null,
 			typeAhead: true,
-			provider: null,
 			ajaxurl: null,
 			cache: false,
-			sugggestionsArray: null,
 			limit: 10,
 			cacheduration: 600
 
@@ -418,8 +412,8 @@
 		 */
 		function getData(){
 			
-			//load suggestions provider method if it was specified
-			if(settings.provider !== null){
+			//load suggestions suggestionsProvider method if it was specified
+			if(settings.suggestionsProvider !== null){
 
 				//check if caching is enabled
 				if (store && settings.cache === true) {
@@ -436,8 +430,8 @@
 					} 
 					else {
 						//excecute the callback and cache the response
-						//check for namespaces in the provider function.
-						var namespaces = settings.provider.split('.');
+						//check for namespaces in the suggestionsProvider function.
+						var namespaces = settings.suggestionsProvider.split('.');
 						
 						//check for existing namespaces upto 4 namespace
 						if (namespaces.length > 0) {
@@ -466,7 +460,7 @@
 									doSuggestForUserDefined(res);
 									break;
 								case 1:
-									var res = window[provider](textbox.value);
+									var res = window[suggestionsProvider](textbox.value);
 									var now = new Date();
 									store.setItem(storedata, JSON.stringify(res));
 									store.setItem(timestamp, now.toISOString());									
@@ -480,8 +474,8 @@
 				} 
 				else {
 					//excecute callback
-					//check for namespaces in the provider function.
-					var namespaces = settings.provider.split('.');
+					//check for namespaces in the suggestionsProvider function.
+					var namespaces = settings.suggestionsProvider.split('.');
 					
 					//check for existing namespaces upto 4 namespace
 					if (namespaces.length > 0) {
@@ -498,7 +492,7 @@
 								doSuggestForUserDefined(window[namespaces[0]][namespaces[1]](textbox.value));
 								break;
 							case 1:
-								doSuggestForUserDefined(window[provider](textbox.value));
+								doSuggestForUserDefined(window[suggestionsProvider](textbox.value));
 								break;
 						}
 
