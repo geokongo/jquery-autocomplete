@@ -65,7 +65,8 @@
 			ajaxurl: null,
 			cache: false,
 			limit: 10,
-			cacheduration: 600
+			cacheduration: 600,
+			fixedwith: null
 
 		}, options);
 
@@ -96,7 +97,7 @@
 		//setting the window resize event listener
 		$(window).resize(function(){
 
-			layer.style.width = textbox.offsetWidth + "px";
+			layer.style.width = (settings.fixedwith) ? settings.fixedwith + "px" : textbox.offsetWidth + "px";
 			
 			//position and show the dropdown list
 			layer.style.left = getLeft() + "px";
@@ -360,7 +361,7 @@
 		function showSuggestions(suggestions){
 			var div = null;
 			layer.innerHTML = "";
-			layer.style.width = textbox.offsetWidth + "px";
+			layer.style.width = (settings.fixedwith) ? settings.fixedwith + "px" : textbox.offsetWidth + "px";
 
 			//loop through the suggestions array adding one at a time
 			for( var i = 0; i < suggestions.length; i++){
