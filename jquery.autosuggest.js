@@ -27,11 +27,6 @@
 	var layer;
 
 	/**
-	 *@var {} The javascript event object
-	 */
-	var eventObject;
-
-	/**
 	 *@var Integer The index of the current suggestion in the suggestions array
 	 */
 	var current = -1;
@@ -44,25 +39,22 @@
 	/**
 	 *@var {} The window localStorage object
 	 */
-	var store = window.localStorage;
+	var store = window.sessionStorage;
 
 	/**
 	 *@var bool true|false Defines whether typeAhead functionality is allowed for this particular keypress
 	 */
 	var typeahead;
 	
-	var timestamp = 'users-suggestions-timestamp-7766';
-	var storedata = 'users-suggestions-data-7766';
-
 	/**
 	 *@var String The name used to identify this timestamp in the storage.
 	 */
-	//var timestamp = 'jquery-autosuggest-timestamp-7766';
+	var timestamp = 'jquery-autosuggest-timestamp-77663434589485';
 
 	/**
 	 *@var String The name used to identify this data record in the storage.
 	 */
-	//var storedata = 'jquery-autosuggest-data-7766';
+	var storedata = 'jquery-autosuggest-data-77663434589485';
 
 	//plugin definition
 	$.fn.autosuggest = function(options){
@@ -77,11 +69,9 @@
 			typeAhead: true,
 			provider: null,
 			ajaxurl: null,
-			localcache: true,
-			sessioncache: false,
-			suggestionsList: null,
+			cache: false,
+			sugggestionsArray: null,
 			limit: 10,
-			production: false,
 			cacheduration: 600
 
 		}, options);
@@ -89,7 +79,6 @@
 		//set the keydown event listeners
 		$(this).on('keydown', function(event){
 			
-			eventObject = event;
 			handleKeydown(event)
 
 		});
@@ -97,23 +86,13 @@
 		//set the keyup event lister
 		$(this).on('keyup', function(event){
 			
-			eventObject = event;
-
-			//alert(textbox.offsetWidth);
-			var keyed = handleKeyup(event);
-
-			//only act for valid keypress
-			if(keyed.character === true){
-				//get suggestion from the provider
-				doSuggest(keyed.typeAhead); 
-			}
+			handleKeyup(event);
 
 		});
 
 		//set the blur event listener
 		$(this).on('blur', function(event){
 			
-			eventObject = event;
 			hideSuggestions();
 
 		});
@@ -181,40 +160,6 @@
 		 *@param [] suggestions Array of the available suggestions
 		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
 		 */
-		function doSuggestForAjax(data){
-
-			if (data.length > 0) {
-
-				//look up suggestions
-				var suggestions = findSuggestions(eventObject.target.value, data);
-
-				if(suggestions.identical.length > 0){
-					if (typeahead === true && settings.typeAhead === true) {
-						typeAhead(suggestions.identical[0]);
-					}
-					showSuggestions(suggestions.identical.concat(suggestions.similar));			
-				}
-				else if(suggestions.similar.length > 0){
-					showSuggestions(suggestions.similar);
-				}
-				else {
-					//no matches
-					hideSuggestions();
-				}
-
-			} 
-			else {
-				//no data
-				hideSuggestions();
-			}
-
-		}	
-
-		/**
-		 *This method provides the first suggestion for autocomplete type ahead
-		 *@param [] suggestions Array of the available suggestions
-		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
-		 */
 		function doSuggestForUserDefined(data){
 
 			if (data.length > 0) {
@@ -247,7 +192,7 @@
 			if (data.length > 0) {
 
 				//look up suggestions
-				var suggestions = findSuggestions(eventObject.target.value, data);
+				var suggestions = findSuggestions(textbox.value, data);
 
 				if(suggestions.identical.length > 0){
 					if (typeahead === true && settings.typeAhead === true) {
@@ -476,201 +421,192 @@
 			//load suggestions provider method if it was specified
 			if(settings.provider !== null){
 
-				//check for namespaces in the provider function.
-				var namespaces = settings.provider.split('.');
+				//check if caching is enabled
+				if (store && settings.cache === true) {
+					
+					//check time stamp here...
+					var now = new Date();
+					var lastTime = store.getItem(timestamp);
+					var lastStamp = new Date(lastTime);
+
+					//the data still valid
+					if ((lastStamp.getTime() + (settings.cacheduration * 1000)) > now.getTime()) {
+							
 				
-				//check for existing namespaces upto 4 namespace
-				if (namespaces.length > 0) {
+					} 
+					else {
+						//excecute the callback and cache the response
+						//check for namespaces in the provider function.
+						var namespaces = settings.provider.split('.');
+						
+						//check for existing namespaces upto 4 namespace
+						if (namespaces.length > 0) {
 
-					switch(namespaces.length){
-						case 4:
-							return {
-								userdefined: true,
-								list: window[namespaces[0]][namespaces[1]][namespaces[2]][namespaces[3]](eventObject.target.value)
-							};
-							break;
-						case 3:
-							return {
-								userdefined: true,
-								list: window[namespaces[0]][namespaces[1]][namespaces[2]](eventObject.target.value)
-							};
-							break;
-						case 2:
-							return {
-								userdefined: true,
-								list: window[namespaces[0]][namespaces[1]](eventObject.target.value)
-							};
-							break;
-						case 1:
-							return {
-								userdefined: true,
-								list: window[provider](eventObject.target.value)
-							};
-							break;
+							switch(namespaces.length){
+								case 4:
+									
+									var res = window[namespaces[0]][namespaces[1]][namespaces[2]][namespaces[3]](textbox.value);
+									var now = new Date();
+									store.setItem(storedata, JSON.stringify(res));
+									store.setItem(timestamp, now.toISOString());
+									doSuggestForUserDefined(res);
+									break;
+								case 3:
+									var res = window[namespaces[0]][namespaces[1]][namespaces[2]](textbox.value);
+									var now = new Date();
+									store.setItem(storedata, JSON.stringify(res));
+									store.setItem(timestamp, now.toISOString());									
+									doSuggestForUserDefined(res);
+									break;
+								case 2:
+									var res = window[namespaces[0]][namespaces[1]](textbox.value);
+									var now = new Date();
+									store.setItem(storedata, JSON.stringify(res));
+									store.setItem(timestamp, now.toISOString());									
+									doSuggestForUserDefined(res);
+									break;
+								case 1:
+									var res = window[provider](textbox.value);
+									var now = new Date();
+									store.setItem(storedata, JSON.stringify(res));
+									store.setItem(timestamp, now.toISOString());									
+									doSuggestForUserDefined(res);
+									break;
+							}
+
+						} 
+
 					}
-
 				} 
+				else {
+					//excecute callback
+					//check for namespaces in the provider function.
+					var namespaces = settings.provider.split('.');
+					
+					//check for existing namespaces upto 4 namespace
+					if (namespaces.length > 0) {
+
+						switch(namespaces.length){
+							case 4:
+								
+								doSuggestForUserDefined(window[namespaces[0]][namespaces[1]][namespaces[2]][namespaces[3]](textbox.value));
+								break;
+							case 3:
+								doSuggestForUserDefined(window[namespaces[0]][namespaces[1]][namespaces[2]](textbox.value));
+								break;
+							case 2:
+								doSuggestForUserDefined(window[namespaces[0]][namespaces[1]](textbox.value));
+								break;
+							case 1:
+								doSuggestForUserDefined(window[provider](textbox.value));
+								break;
+						}
+
+					}				
+
+				}
 
 			}
 			//check if any suggestions list array was provided
-			else if (settings.suggestionsList !== null) {
+			else if (settings.sugggestionsArray !== null) {
 
-				return {
-					userdefined: false,
-					list: settings.suggestionsList
-				};
+				doSuggestForPluginDefined(settings.sugggestionsArray);
 
 			} 
 			//check if ajax url is provided and fetch data
 			else if(settings.ajaxurl !== null) {
 
 				//check if local storage is enabled
-				if (settings.localStorage !== false && store !== null) {
+				if (store !== null && settings.cache === true) {
+
+					//compose data key
+					var timestampKey = encodeURIComponent(settings.ajaxurl);
+					var timestampData = encodeURIComponent(settings.ajaxurl)+"data";
 					
 					//is there data stored already?
-					if (store.getItem(timestamp) !== null) {
+					if (store.getItem(timestampKey) !== null) {
 						
 						//check time stamp here...
 						var now = new Date();
-						var lastTime = store.getItem(timestamp);
+						var lastTime = store.getItem(timestampKey);
 						var lastStamp = new Date(lastTime);
 
 						//the data expired
-						if ((lastStamp.getTime() + (duration * 1000)) < now.getTime()) {
+						if ((lastStamp.getTime() + (settings.cacheduration * 1000)) < now.getTime()) {
 							
-							//is the user connected to the internet?
-							if (navigator.onLine === true) {
-								//get fresh data
-								$.ajax({
-
-									url: settings.ajaxurl,
-									type: 'GET',
-									dataType: 'json',
-									success: function(response){
-
-										var now = new Date();
-										store.setItem(storedata, JSON.stringify(response));
-										store.setItem(timestamp, now.toISOString());
-
-										return {
-											userdefined: false,
-											list: response
-										};
-									},
-									error: function(err){
-										console.error('There was an error with the ajax request in jquery.autosuggest');
-										//there was an error
-										return {
-											userdefined: false,
-											list: []
-										};
-									}
-
-								});
-
-							} 
-							//no internet? use available data
-							else {
-								return {
-									userdefined: false,
-									list: JSON.parse(store.getItem(storedata))
-								};	
-							}
-						} 
-						//store data is up to data? use it
-						else {
-							//use current data
-							return {
-								userdefined: false,
-								list: JSON.parse(store.getItem(storedata))
-							};
-						}
-
-					} 
-					// no data in store? check online
-					else {
-						if (navigator.onLine === true) {
-							//yes storage, no data, yes internet - get data
 							$.ajax({
 
 								url: settings.ajaxurl,
 								type: 'GET',
 								dataType: 'json',
 								success: function(response){
-									var now = new Date();
-									store.setItem(storedata, JSON.stringify(response));
-									store.setItem(timestamp, now.toISOString());
 
-									return {
-										userdefined: false,
-										list: response
-									};
+									var now = new Date();
+									store.setItem(timestampData, JSON.stringify(response));
+									store.setItem(timestampKey, now.toISOString());
+									doSuggestForPluginDefined(response);
 								},
-								error: function(error){
+								error: function(err){
 									console.error('There was an error with the ajax request in jquery.autosuggest');
-									return {
-										userdefined: false,
-										list: []
-									};
 								}
 
 							});
 
 						} 
+						//store data is up to date? use it
 						else {
-							//yes storage, no data, no internet
-							console.error("jquery.autosuggest can't fetch data - you are currently offline!");
-							return {
-								userdefined: false,
-								list: []
-							};
+							doSuggestForPluginDefined(JSON.parse(store.getItem(timestampData)));
 						}
-					}
-				} 
-				//there is no local storage, fetch data from the server
-				else {
-					//Poll server if we are online
-					if (navigator.onLine === true) {
-						
+
+					} 
+					// no data in store? check online
+					else {
 						$.ajax({
 
 							url: settings.ajaxurl,
 							type: 'GET',
-							async: false,
 							dataType: 'json',
 							success: function(response){
-								doSuggestForAjax(response);
+
+								var now = new Date();
+								store.setItem(timestampData, JSON.stringify(response));
+								store.setItem(timestampKey, now.toISOString());
+								doSuggestForPluginDefined(response);
+
 							},
-							error: function(err){
-								//there was an error
-								console.error('There was an error with the ajax request in jquery.autosuggest!');
-								return {
-									userdefined: false,
-									list: []
-								};
+							error: function(error){
+								console.error('There was an error with the ajax request in jquery.autosuggest');
 							}
 
 						});
 
-					} 
-					else {
-						//no storage, not internet - Just return nothing
-						console.error("You are not connected to the internet - jquery.autosuggest!");
-						return {
-							userdefined: false,
-							list: []
-						};
 					}
+
+				} 
+				//there is no local storage, fetch data from the server
+				else {
+
+					$.ajax({
+
+						url: settings.ajaxurl,
+						type: 'GET',
+						dataType: 'json',
+						success: function(response){
+							doSuggestForPluginDefined(response);
+						},
+						error: function(err){
+							//there was an error
+							console.error('There was an error with the ajax request in jquery.autosuggest!');
+						}
+
+					});
+
 				}
 
 			}
 			//if none of the above - do nothing!
 			else {
 				console.error("No data source provided for jquery.autosuggest!");
-				return {
-					userdefined: false,
-					list: []
-				};
 			} 
 
 		}
@@ -729,7 +665,7 @@
 		    }
 
 		}
-		
+
 	};
 
 }(jQuery));
