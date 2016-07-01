@@ -289,9 +289,8 @@
 			textbox = textbox || inputbox;
 
 			layer = document.createElement("div");
-			layer.className = "suggestions";
+			layer.className = "jquery-autosuggest-suggestions";
 			layer.style.visibility = "hidden";
-			//layer.style.width = textbox.offsetWidth + "px";
 
 			document.body.appendChild(layer);
 
@@ -311,6 +310,9 @@
 					textbox.focus();
 				}
 			}
+
+			//insert the css style definition
+			insertCSS();
 		}
 
 		/**
@@ -686,6 +688,37 @@
 		 */
 		function escapeString(input){
 			return input.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+		}
+
+		/**
+		 * This method inserts the css styles for the dropdown into the DOM
+		 * @param null
+		 * @return null
+		 */
+		function insertCSS(){
+
+			//define the css style string
+			var dropdownCSS = "div.jquery-autosuggest-suggestions { margin-bottom: 8px;background-color: #ffffff; border-radius: 1px;border: 1px solid #dddddd;position: absolute;}";
+			dropdownCSS += "div.jquery-autosuggest-suggestions div {cursor: default;padding: 0px 3px;font-size: 16.099999999999998px;font-weight: 200;line-height: 1.4;border-bottom: 1px solid rgba(128,128,128,0.1);}";
+			dropdownCSS += "div.jquery-autosuggest-suggestions div.current {background-color: #428bca;color: white;}";
+
+			var documentHead = document.head || document.getElementsByTagName('head')[0];
+			var stylesheetNode = document.createElement('style');
+
+			stylesheetNode.type = 'text/css';
+
+			if (stylesheetNode.styleSheet){
+
+			  stylesheetNode.styleSheet.cssText = css;
+
+			} 
+			else {
+
+			  stylesheetNode.appendChild(document.createTextNode(dropdownCSS));
+
+			}
+
+			documentHead.appendChild(stylesheetNode);
 		}
 
 	};
