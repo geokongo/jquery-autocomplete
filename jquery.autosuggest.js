@@ -117,6 +117,17 @@
 
 		});
 
+		//setting the window resize event listener
+		$(window).resize(function(){
+
+			layer.style.width = textbox.offsetWidth + "px";
+			
+			//position and show the dropdown list
+			layer.style.left = getLeft() + "px";
+			layer.style.top = (getTop() + textbox.offsetHeight) + "px";
+
+		});
+
 		/**
 		 *This method checks if the keyup event involved a character key,
 		 *All non character keys are to be ignored
