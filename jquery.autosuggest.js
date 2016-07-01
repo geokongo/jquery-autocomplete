@@ -49,7 +49,7 @@
 	/**
 	 *@var bool true|false Defines whether typeAhead functionality is allowed for this particular keypress
 	 */
-	var isTypeAheadKey;
+	var typeahead;
 	
 	var timestamp = 'users-suggestions-timestamp-7766';
 	var storedata = 'users-suggestions-data-7766';
@@ -77,10 +77,12 @@
 			typeAhead: true,
 			provider: null,
 			ajaxurl: null,
-			localStorage: true,
-			sessionStorage: false,
+			localcache: true,
+			sessioncache: false,
 			suggestionsList: null,
-			limit: 10
+			limit: 10,
+			production: false,
+			cacheduration: 600
 
 		}, options);
 
@@ -96,7 +98,6 @@
 		$(this).on('keyup', function(event){
 			
 			eventObject = event;
-			layer.style.width = event.target.offsetWidth + "px";
 
 			//alert(textbox.offsetWidth);
 			var keyed = handleKeyup(event);
@@ -135,29 +136,23 @@
 		 *@return {} true|false True if character key and typeAhead, otherwise false
 		 */
 		function handleKeyup(event){
-			var keycode = event.keyCode;
 
-			if(keycode == 8 || keycode == 46){
+			if(event.keyCode == 8 || event.keyCode == 46){
 				//do not type ahead for backspace and delete
-				return {
-					character: true,
-					typeAhead: false
-				}
+				typeahead = false;
+				getData(); //valid character, get suggestions
 			}
-			if(keycode < 32 || (keycode >= 33 && keycode <= 46) || (keycode >= 112 && keycode <= 123)){
+			if(event.keyCode < 32 || (event.keyCode >= 33 && event.keyCode <= 46) || (event.keyCode >= 112 && event.keyCode <= 123)){
 				//do not type ahead for other non character keys
-				return {
-					character: false,
-					typeAhead: false
-				}
+				typeahead = false;
+				//invalid character for loading suggestions. do nothing
 			}
 			else{
 				//for all other character keys, type ahead
-				return {
-					character: true,
-					typeAhead: true
-				}
+				typeahead = true;
+				getData(); //valid character for loading suggestions
 			}
+
 		}
 
 		/**
@@ -188,60 +183,12 @@
 		 */
 		function doSuggest(typeahead){
 
-			isTypeAheadKey = typeahead;
+			typeahead = typeahead;
 
 			//get the data
 			var items = getData();
 
-			if (items.userdefined === true) {
 
-				if (items.list.length > 0) {
-
-					if(typeahead === true && settings.typeAhead === true){
-						
-						typeAhead(items.list[0]);
-						showSuggestions(items.list);
-
-					}
-					else{
-						showSuggestions(items.list);
-					}
-
-				} 
-				else {
-					//no data
-					hideSuggestions();
-				}
-
-			} 
-			else {
-
-				if (items.list.length > 0) {
-
-					//look up suggestions
-					var suggestions = findSuggestions(eventObject.target.value, items.list);
-
-					if(suggestions.identical.length > 0){
-						if (typeahead === true && settings.typeAhead === true) {
-							typeAhead(suggestions.identical[0]);
-						}
-						showSuggestions(suggestions.identical.concat(suggestions.similar));			
-					}
-					else if(suggestions.similar.length > 0){
-						showSuggestions(suggestions.similar);
-					}
-					else {
-						//no matches
-						hideSuggestions();
-					}
-
-				} 
-				else {
-					//no data
-					hideSuggestions();
-				}
-
-			}
 
 		}
 		/**
@@ -257,7 +204,68 @@
 				var suggestions = findSuggestions(eventObject.target.value, data);
 
 				if(suggestions.identical.length > 0){
-					if (isTypeAheadKey === true && settings.typeAhead === true) {
+					if (typeahead === true && settings.typeAhead === true) {
+						typeAhead(suggestions.identical[0]);
+					}
+					showSuggestions(suggestions.identical.concat(suggestions.similar));			
+				}
+				else if(suggestions.similar.length > 0){
+					showSuggestions(suggestions.similar);
+				}
+				else {
+					//no matches
+					hideSuggestions();
+				}
+
+			} 
+			else {
+				//no data
+				hideSuggestions();
+			}
+
+		}	
+
+		/**
+		 *This method provides the first suggestion for autocomplete type ahead
+		 *@param [] suggestions Array of the available suggestions
+		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
+		 */
+		function doSuggestForUserDefined(data){
+
+			if (data.length > 0) {
+
+				if(typeahead === true && settings.typeAhead === true){
+					
+					typeAhead(data[0]);
+					showSuggestions(data);
+
+				}
+				else{
+					showSuggestions(data);
+				}
+
+			} 
+			else {
+				//no data
+				hideSuggestions();
+			}
+
+		}		
+
+		/**
+		 *This method provides the first suggestion for autocomplete type ahead
+		 *@param [] suggestions Array of the available suggestions
+		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
+		 */
+		function doSuggestForPluginDefined(data){
+
+			if (data.length > 0) {
+
+				//look up suggestions
+				var suggestions = findSuggestions(eventObject.target.value, data);
+
+				if(suggestions.identical.length > 0){
+					if (typeahead === true && settings.typeAhead === true) {
 						typeAhead(suggestions.identical[0]);
 					}
 					showSuggestions(suggestions.identical.concat(suggestions.similar));			
