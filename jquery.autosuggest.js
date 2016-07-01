@@ -181,21 +181,6 @@
 		 *@param [] suggestions Array of the available suggestions
 		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
 		 */
-		function doSuggest(typeahead){
-
-			typeahead = typeahead;
-
-			//get the data
-			var items = getData();
-
-
-
-		}
-		/**
-		 *This method provides the first suggestion for autocomplete type ahead
-		 *@param [] suggestions Array of the available suggestions
-		 *@param Bool true|false typeAhead Indicates whether or not the type ahead functionality should be used
-		 */
 		function doSuggestForAjax(data){
 
 			if (data.length > 0) {
@@ -727,6 +712,24 @@
 			return suggestions;
 
 		}
+
+		/**
+		 * This method shuffles the elements of an array
+		 * 
+		 * @param [] array The array to reshuffle
+		 * @return null It modifies the original array
+		 */
+		function reshuffle(array){
+			var j, x, i;
+		    for (i = a.length; i; i -= 1) {
+		        j = Math.floor(Math.random() * i);
+		        x = a[i - 1];
+		        a[i - 1] = a[j];
+		        a[j] = x;
+		    }
+
+		}
+		
 	};
 
 }(jQuery));
