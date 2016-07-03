@@ -2,11 +2,13 @@
 This jquery plugin provides suggestions in a dropdown list as the user types in the input field. The suggestions provided are matched based on the content of characters already typed in the text input field. If there are identical matches, the plugin will attemp to type ahead of the user in the input box.
 
 ### Features ###
-* [Auto Complete for text input fields]()
-* [Session caching of data to reduce ajax request]()
-* [Type ahead functionality]()
-* [Fully customizeable user interface]()
-* [You can extend the plugin to provide suggestions your own way]()
+* [Auto Complete for text input fields](#autosuggest)
+* [Type ahead functionality](#typeahead)
+* [Provide a Suggestions Array](#sugggestionsArray)
+* [Specify a Suggestions Array Url](#ajaxurl)
+* [Session caching of data array](#cache)
+* [Custom Suggestions Provider Callback Function](#suggestionsProvider)
+* [Fully customizeable user interface](#customizeable)
 
 ## Example Usage ##
 
@@ -25,6 +27,7 @@ After loading the jquery library, load the plugin's minified javascript file.
 
 That's all the basic loading needed. You do not need to load any separate css files as the styling of the suggestions drop down is dynamically inserted using javascript. However, if you would like to style the drop down in your own, check the later sections on how to include your own styles.
 
+<a name="autosuggest">Auto Complete for text input fields </a>
 In order to get up and running with autosuggest with minimal configuration attach the autosuggest() function to a input field using either the class name or the id.
 
 ```javascript 
