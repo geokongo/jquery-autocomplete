@@ -8,7 +8,7 @@
         "type ahead",
         "jquery plugin"
     ],
-    "version": "1.3.0",
+    "version": "1.3.1",
     "author": {
         "name": "Geoffrey Bans",
         "url": "http://geoffreyoliver.com"
@@ -31,6 +31,6 @@
     "docs": "https://github.com/GeoffreyOliver/jquery-autosuggest",
     "download": "https://github.com/GeoffreyOliver/jquery-autosuggest/archive/master.zip",
     "dependencies": {
-        "jquery": ">=1.5"
+        "jquery": ">=1.7"
     }
 }
