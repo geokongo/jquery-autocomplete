@@ -27,7 +27,8 @@ After loading the jquery library, load the plugin's minified javascript file.
 
 That's all the basic loading needed. You do not need to load any separate css files as the styling of the suggestions drop down is dynamically inserted using javascript. However, if you would like to style the drop down in your own, check the later sections on how to include your own styles.
 
-<a name="autosuggest">Auto Complete for text input fields </a>
+### <a name="autosuggest">Auto Complete for text input fields </a> ###
+
 In order to get up and running with autosuggest with minimal configuration attach the autosuggest() function to a input field using either the class name or the id.
 
 ```javascript 
