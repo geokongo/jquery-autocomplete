@@ -509,8 +509,8 @@
 			}
 			//check if any suggestions list array was provided
 			else if (settings.sugggestionsArray !== null) {
-
-				doSuggestForPluginDefined(settings.sugggestionsArray);
+				//pass array by value
+				doSuggestForPluginDefined(settings.sugggestionsArray.slice(0));
 
 			} 
 			//check if ajax url is provided and fetch data
