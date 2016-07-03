@@ -12,6 +12,8 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 * [Customize User Interface](#customizeable)
 * [Screenshots](#screenshots)
 
+## [Live Demo](https://GeoffreyOliver.github.io/jquery.autosuggest/index.html) ###
+
 ## Example Usage ##
 
 The autosuggest plugin requires the the jquery library in order to function, being a jquery plugin that's kinda obvious.
