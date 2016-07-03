@@ -13,19 +13,23 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 The autosuggest plugin requires the the jquery library in order to function, being a jquery plugin that's kinda obvious.
 Load the jquery library first in this manner:
 
-```html
+```javascript
 <script type="text/javascript" src="scripts/js/jquery.min.js"></script> 
 ```
 
 After loading the jquery library, load the plugin's minified javascript file.
 
-```html <script type="text/javascript" src="scripts/js/jquery.autosuggest.min.js"></script> ```
+```javascript 
+<script type="text/javascript" src="scripts/js/jquery.autosuggest.min.js"></script> 
+```
 
 That's all the basic loading needed. You do not need to load any separate css files as the styling of the suggestions drop down is dynamically inserted using javascript. However, if you would like to style the drop down in your own, check the later sections on how to include your own styles.
 
 In order to get up and running with autosuggest with minimal configuration attach the autosuggest() function to a input field using either the class name or the id.
 
-```javascript $("#states").autosuggest(); ```
+```javascript 
+$("#states").autosuggest(); 
+```
 
 At the minumum, autosuggest plugin requires an array of options against which it will perform matching to provide the relevant or similar matches to the user input already in the input field.
 Say you have a javascript array of states in this format:
@@ -60,12 +64,12 @@ By default the type ahead functionality is enabled. If there are identical match
 If there are no identical matches, the type ahead functionality is disabled.
 You can choose to manully disable the type ahead functionality, if it doesn't click with you, in this manner. Provide as an options to the constructor, setting it to false.
 
-`
+```javascript
 $("states").autosuggest({
 	sugggestionsArray: states,
 	typeAhead: false
 });
-`
+```
 
 This would ensure that type ahead doesn't work event if there are identical matches.
 
@@ -73,11 +77,11 @@ You are not limited to providing an array as a data source for the autosuggest p
 
 You can provide an url to used to fetch the array to be used for matching the suggestions. This url would be loaded using ajax and should return a valid JSON string in order to be parsed for options by javascript. Here is how you provide the url as a parameter:
 
-`
+```javascript
 $("states").autosuggest({
 	ajaxurl: "localhost:3000/app/users/states"
 });
-`
+```
 
 The data sources are loaded in order of priority - if you specify both a sugggestionsArray and an ajaxurl, the array is checked first. If found, it used to match suggestions and the therefore the url would not be reached. In the case that you would like to use the url to load the array for matching suggestions, then specify the url only, ommitting the option for the sugggestionsArray.
 
@@ -91,22 +95,22 @@ This data is store in sessionStorage and is, therefore, only available in the us
 
 You enable cache in this manner:
 
-`
+```javascript
 $("#states").autosuggest({
 	ajaxurl: "localhost:3000/app/users/states",
 	cache: true
 });
-`
+```
 
 In some instances you might want to implicitly specify the duration before which this data is fetched again - in case this data might change and you would love it if the users got the latest options. You can specify this time in seconds as a parameter to the constructor:
 
-`
+```javascript
 $("#states").autosuggest({
 	ajaxurl: "localhost:3000/app/users/states",
 	cache: true,
 	cacheduration: 14400
 });
-`
+```
 
 In this case, whenever data is required the plugin compares the timestamp of the last data accessed from the url and with the current time and cacheduration and decides wether to load the url again or to use the data in the cache. 
 Note:
@@ -116,32 +120,32 @@ You may want to use the plugin for multiple text input fields in the same page. 
 
 Suggestions are provided based on the plugin's own algorithim for performing the matches. You don't like it, right? Wait... You don't have to use it. You can specify you own callback function to be used to find matches for the user input. The autosuggest accepts a function as a parameter in this manner:
 
-`
+```javascript
 $("states").autosuggest({
 	suggestionsProvider: YouStatesSuggestionsFunction
 });
-`
+```
 
 You pass the function without the parenthesis so that it's not excecuted before the right time. This function should recieve as a parameter, the current text content in the user input field. In return, the function would return a valid javascript array of options.
 
 By default type ahead in enabled. If your suggestionsProvider doesn't return items identical to the user input, the plugin would still take the first element in the list and type it into the input field. In some cases, this might be annoying to your users. For this reason, you might want to implicitly turn off the type ahead functionality in this manner:
 
-`
+```javascript
 $("states").autosuggest({
 	suggestionsProvider: YouStatesSuggestionsFunction,
 	typeAhead: false
 });
-`
+```
 
 The dropdown of suggestions provided by the plugin is responsive i.e. gets resize and respositioned as appropriate with browser window resize. This is tight bound into the plugin because I think that is something you really need.
 
 In the event that you need to specify a fixed column width for the dropdown instead, you can specify it as a parameter to the constructor. Specify the width in pixels, without the 'px' suffix:
 
-`
+```javascript
 $("#states").autosuggest({
 	fixedwith: 150
 });
-`
+```
 
 This means that if you resize your window, the dropdown would still be repositioned to the bottom left corner of the input field but the width would remain unchanged, as you specified.
 ### Screenshots ###
