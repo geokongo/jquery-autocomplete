@@ -173,7 +173,7 @@ $("#states").autosuggest({
 
 This means that if you resize your window, the dropdown would still be repositioned to the bottom left corner of the input field but the width would remain unchanged, as you specified.
 
-Here are the CSS rules that style the dropdown, feel free to alter using the very same selectors as you desire:
+Here are the CSS rules that style the dropdown, feel free to alter, using the very same query selectors, as you desire:
 
 ```css
 div.suggestions {
