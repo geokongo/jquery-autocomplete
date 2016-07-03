@@ -59,7 +59,7 @@ As the user types input into the input field, the plugin searches the provided a
 
 ### <a name="limit"> Limit Number of Options to Show </a> ###
 
-Usually, the plugin would only return the first 10 matches found, or less if no more was found. You don't like this? Don't think about it.. You can set your own limit, say you would like a dropdown with 103 options provided:
+Usually, the plugin would only return the first 10 matches found, or less if no more were found. You don't like this? Don't think about it.. You can set your own limit, say you would like a dropdown with 103 (too much though) options provided:
 
 ```javascript
 $("states").autosuggest({
@@ -83,13 +83,13 @@ $("states").autosuggest({
 });
 ```
 
-This would ensure that type ahead doesn't work event if there are identical matches.
+This would ensure that type ahead doesn't work even if there are identical matches.
 
 ### <a name="ajaxurl"> Specify a Suggestions Array Url </a> ###
 
 You are not limited to providing an array as a data source for the autosuggest plugin, as this may not be secure or convenient in some instances. A number of amazing options are available to you.
 
-You can provide an url to used to fetch the array to be used for matching the suggestions. This url would be loaded using ajax and should return a valid JSON string in order to be parsed for options by javascript. Here is how you provide the url as a parameter:
+You can provide a url to be used to fetch the array to be used for matching the suggestions. This url would be loaded using ajax and should return a valid JSON object in order to be parsed for options by javascript. Here is how you provide the url as a parameter:
 
 ```javascript
 $("states").autosuggest({
@@ -103,11 +103,11 @@ The plugin would load the ajax url provided literally without appending any para
 
 ### <a name="cache"> Session caching of Data Array </a> ###
 
-Constantly loading data from a url in order to perform the matches is not very interesting, especially if the data fetched doesn't really change that fast. In this case, you can provide greater user experience by using the plugin's in build cache mechanism.
+Constantly loading data from a url in order to perform the matches is not very interesting, especially if the data fetched doesn't really change that frequently. In this case, you can provide greater user experience by using the plugin's in build cache mechanism.
 
-Autossuggest plugin can store the result of the ajax call in the user's local computer and load it every time as needed, without having to poll the server. This would save the user's device's battery power, time and at the same time providing a greater experience.
+Autossuggest plugin can store the result of the ajax call in the user's local cache and load it every time as needed, without having to poll the server. This would save the user's device's battery power, time and at the same time providing a greater experience.
 
-This data is store in sessionStorage and is, therefore, only available in the user's current table and the data is cleared as soon as the user closes that browser tab, closes their browser window altogether or shuts down their computer.
+This data is stored in sessionStorage and is, therefore, only available in the user's current tab and the data is cleared as soon as the user closes that browser tab or closes their browser window altogether or shuts down their computer.
 
 You enable cache in this manner:
 
@@ -118,7 +118,7 @@ $("#states").autosuggest({
 });
 ```
 
-In some instances you might want to implicitly specify the duration before which this data is fetched again - in case this data might change and you would love it if the users got the latest options. You can specify this time in seconds as a parameter to the constructor:
+In some instances you might want to implicitly specify the duration before which this data is fetched again - in case this data might change, and you would love it if the users got the latest options. You can specify this time in seconds as a parameter to the constructor:
 
 ```javascript
 $("#states").autosuggest({
@@ -128,15 +128,17 @@ $("#states").autosuggest({
 });
 ```
 
-In this case, whenever data is required the plugin compares the timestamp of the last data accessed from the url and with the current time and cacheduration and decides wether to load the url again or to use the data in the cache. 
-Note:
-Even if you set the cache duration to 24 hours and the users closes that browser tab, this data is cleared from cache and will have to reloaded again from the url the next time needed.
+In this case, whenever data is required the plugin compares the timestamp of the last data accessed from the url with the current time and cacheduration and decides wether to load the url again or to use the data in the cache. 
 
-You may want to use the plugin for multiple text input fields in the same page. That's completely cool with us! What about if you specified cache: true for these input fields, would the plugin attempt to use the same data althrough? Well, no. Provided the url parameter for each input field instance is different, each field's data is stored separately. Otherwise, yes we will use the same data for all fields of the url is the same.
+#### Note: ####
+
+Even if you set the cache duration to 24 hours and the user closes that browser tab, this data is cleared from cache and will have to reloaded again from the url the next time needed.
+
+You may want to use the plugin for multiple text input fields in the same page. That's completely cool with us! What about if you specified (cache: true) for these input fields, would the plugin attempt to use the same data althrough? Well, no. Provided the url parameter for each input field instance is different, each field's data is stored separately. Otherwise, yes we will use the same data for all fields if the url is the same.
 
 ### <a name="suggestionsProvider"> Custom Suggestions Provider Callback Function </a> ###
 
-Suggestions are provided based on the plugin's own algorithim for performing the matches. You don't like it, right? Wait... You don't have to use it. You can specify you own callback function to be used to find matches for the user input. The autosuggest accepts a function as a parameter in this manner:
+Suggestions are provided based on the plugin's own algorithim for performing the matches. You don't like it, right? Wait... You don't have to use it. You can specify your own callback function to be used to find matches for the user input. The autosuggest accepts a function as a parameter in this manner:
 
 ```javascript
 $("states").autosuggest({
@@ -146,7 +148,9 @@ $("states").autosuggest({
 
 You pass the function without the parenthesis so that it's not excecuted before the right time. This function should recieve as a parameter, the current text content in the user input field. In return, the function would return a valid javascript array of options.
 
-By default type ahead in enabled. If your suggestionsProvider doesn't return items identical to the user input, the plugin would still take the first element in the list and type it into the input field. In some cases, this might be annoying to your users. For this reason, you might want to implicitly turn off the type ahead functionality in this manner:
+If you callback function is namespaced, it would still be loaded right. The plugin supports nested namespaces up to level 4, e.g. ` Lib.My.Callback.Function() `
+
+By default type ahead is enabled. If your suggestionsProvider doesn't return items identical to the user input, the plugin would still take the first element in the list and type it into the input field. In some cases, this might be annoying to your users. For this reason, you might want to implicitly turn off the type ahead functionality if you are using a custom callback function in this manner:
 
 ```javascript
 $("states").autosuggest({
@@ -157,7 +161,7 @@ $("states").autosuggest({
 
 ### <a name="customizeable"> Customize User Interface </a> ###
 
-The dropdown of suggestions provided by the plugin is responsive i.e. gets resize and respositioned as appropriate with browser window resize. This is tight bound into the plugin because I think that is something you really need.
+The dropdown of suggestions provided by the plugin is responsive i.e. gets resized and respositioned as appropriate with browser window resize. This is tight bound into the plugin because I think that is something you really need.
 
 In the event that you need to specify a fixed column width for the dropdown instead, you can specify it as a parameter to the constructor. Specify the width in pixels, without the 'px' suffix:
 
@@ -169,6 +173,30 @@ $("#states").autosuggest({
 
 This means that if you resize your window, the dropdown would still be repositioned to the bottom left corner of the input field but the width would remain unchanged, as you specified.
 
+Here are the CSS rules that style the dropdown, feel free to alter using the very same selectors as you desire:
+
+```css
+div.suggestions {
+    margin-bottom: 8px;
+  	background-color: #ffffff;
+  	border-radius: 1px;
+    border: 1px solid #dddddd;
+    position: absolute;
+}
+div.suggestions div {
+    cursor: default;
+    padding: 0px 3px;
+  	font-size: 16.099999999999998px;
+  	font-weight: 200;
+  	line-height: 1.4;
+    border-bottom: 1px solid rgba(128,128,128,0.1);
+}
+div.suggestions div.current {
+    background-color: #428bca;
+    color: white;
+}
+
+```
 ### <a name="screenshots"> Screenshots </a> ###
 
 Matching by keyword with type ahead enabled. The type ahead only functions if the first letters type identically match those of an available entry. Type ahead is case sensitive, so both uppercase and lowercase will be matched by plugin will only attempt to type ahead of you for the same case matches.
