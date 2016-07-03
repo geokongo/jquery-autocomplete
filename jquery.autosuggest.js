@@ -1,5 +1,5 @@
 /*!
- * jQuery AutoSuggest Plugin v1.3.0
+ * jQuery AutoSuggest Plugin v1.3.1
  * https://github.com/GeoffreyOliver/jquery-autosuggest
  * 
  * This plugin provides autosuggestion while typing into a textbox input field
