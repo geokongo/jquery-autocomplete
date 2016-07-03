@@ -13,29 +13,29 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 The autosuggest plugin requires the the jquery library in order to function, being a jquery plugin that's kinda obvious.
 Load the jquery library first in this manner:
 
-<script type="text/javascript" src="scripts/js/jquery.min.js"></script>
+` <script type="text/javascript" src="scripts/js/jquery.min.js"></script> `
 
 After loading the jquery library, load the plugin's minified javascript file.
-<script type="text/javascript" src="scripts/js/jquery.autosuggest.min.js"></script>
+` <script type="text/javascript" src="scripts/js/jquery.autosuggest.min.js"></script> `
 
 That's all the basic loading needed. You do not need to load any separate css files as the styling of the suggestions drop down is dynamically inserted using javascript. However, if you would like to style the drop down in your own, check the later sections on how to include your own styles.
 
 In order to get up and running with autosuggest with minimal configuration attach the autosuggest() function to a input field using either the class name or the id.
 
-$("#states").autosuggest();
+` $("#states").autosuggest(); `
 
 At the minumum, autosuggest plugin requires an array of options against which it will perform matching to provide the relevant or similar matches to the user input already in the input field.
 Say you have a javascript array of states in this format:
 
-var states = ["Alabama", "Alaska", "Arizona", "Arkansas","California", "Colorado", "Connecticut",
-"Delaware", "Florida", "Georgia", "Hawaii","Idaho", "Illinois", "Indiana", "Iowa"];
+` var states = ["Alabama", "Alaska", "Arizona", "Arkansas","California", "Colorado", "Connecticut",
+"Delaware", "Florida", "Georgia", "Hawaii","Idaho", "Illinois", "Indiana", "Iowa"]; `
 
 You will pass this as a parameter to the plugin in this manner:
-
+`
 $("states").autosuggest({
 	sugggestionsArray: states
 });
-
+`
 As the user types input into the input field, the plugin searches the provided array for similar or identical input to what the user has already typed in the input field. This number of options is then provided as a dropdown list below the input field. The user can then select their favorite option by either using the mouse or using the keyboard up and down arrow keys.
 
 Usually, the plugin would only return the first 10 matches found, or less if no more was found. You don't like this? Don't think about it.. You can set your own limit, say you would like a dropdown with 103 options provided:
