@@ -6,7 +6,8 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 * [Provide a Suggestions Array](#sugggestionsArray)
 * [Limit Number of Options to Show](#limit)
 * [Type ahead functionality](#typeahead)
-* [Specify a Suggestions Array Url](#ajaxurl)
+* [Specify Ajax Url](#ajaxurl)
+* [Append Input to Ajax Url](#apendgetdata)
 * [Session caching of data array](#cache)
 * [Custom Suggestions Provider Callback Function](#suggestionsProvider)
 * [Customize User Interface](#customizeable)
@@ -87,7 +88,7 @@ $("states").autosuggest({
 
 This would ensure that type ahead doesn't work even if there are identical matches.
 
-### <a name="ajaxurl"> Specify a Suggestions Array Url </a> ###
+### <a name="ajaxurl"> Specify Ajax Url </a> ###
 
 You are not limited to providing an array as a data source for the autosuggest plugin, as this may not be secure or convenient in some instances. A number of amazing options are available to you.
 
@@ -102,6 +103,40 @@ $("states").autosuggest({
 The data sources are loaded in order of priority - if you specify both a sugggestionsArray and an ajaxurl, the array is checked first. If found, it used to match suggestions and the therefore the url would not be reached. In the case that you would like to use the url to load the array for matching suggestions, then specify the url only, ommitting the option for the sugggestionsArray.
 
 The plugin would load the ajax url provided literally without appending any parameters to it. Therefore, if you application needs some authentication in order to access the array of options then you will need to append the necessary parameters in the url or something like that.
+
+### <a name="apendgetdata"> Append Input to Ajax Url </a> ###
+
+You can choose to append the content of the input field to the ajax url. The value of the  input field is accessed using the key:
+
+` query=string `
+
+```javascript
+$(".airports").autosuggest({
+	ajaxurl: "localhost:3000/app/getairports/states",
+	setparams: true
+});
+
+This becomes:
+
+` localhost:3000/app/getairports/states?query=sydney `
+
+
+If you have other parameters to pass along, you can pass them as an object parameter and they will be appending as a get string to the url.
+
+```javascript
+$(".airports").autosuggest({
+	ajaxurl: "localhost:3000/app/getairports/states",
+	setparams: true,
+	urlparams: {
+		param1: value1,
+		param2: value2
+	}
+});
+
+This becomes:
+
+` localhost:3000/app/getairports/states?query=sydney&param1=value1&param2=value2 `
+
 
 ### <a name="cache"> Session caching of Data Array </a> ###
 
