@@ -112,30 +112,32 @@ You can choose to append the content of the input field to the ajax url. The val
 
 ```javascript
 $(".airports").autosuggest({
-	ajaxurl: "localhost:3000/app/getairports/states",
+	ajaxurl: "localhost:3000/app/getairports",
 	setparams: true
 });
+```
 
 This becomes:
 
-` localhost:3000/app/getairports/states?query=sydney `
+` localhost:3000/app/getairports?query=sydney `
 
 
 If you have other parameters to pass along, you can pass them as an object parameter and they will be appending as a get string to the url.
 
 ```javascript
 $(".airports").autosuggest({
-	ajaxurl: "localhost:3000/app/getairports/states",
+	ajaxurl: "localhost:3000/app/getairports",
 	setparams: true,
 	urlparams: {
 		param1: value1,
 		param2: value2
 	}
 });
+```
 
 This becomes:
 
-` localhost:3000/app/getairports/states?query=sydney&param1=value1&param2=value2 `
+` localhost:3000/app/getairports?query=sydney&param1=value1&param2=value2 `
 
 
 ### <a name="cache"> Session caching of Data Array </a> ###
