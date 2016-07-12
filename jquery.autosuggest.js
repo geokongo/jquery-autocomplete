@@ -1,5 +1,5 @@
 /*!
- * jQuery AutoSuggest Plugin v1.3.1
+ * jQuery AutoSuggest Plugin v1.3.2
  * https://github.com/GeoffreyOliver/jquery-autosuggest
  * 
  * This plugin provides autosuggestion while typing into a textbox input field
@@ -66,7 +66,9 @@
 			cache: false,
 			limit: 10,
 			cacheduration: 600,
-			fixedwith: null
+			fixedwith: null,
+			setparams: false,
+			urlparams: {}
 
 		}, options);
 
@@ -534,9 +536,21 @@
 						//the data expired
 						if ((lastStamp.getTime() + (settings.cacheduration * 1000)) < now.getTime()) {
 							
+							var params = "";
+							if (settings.setparams === true) {
+
+								//compose the urls params
+								params+= "?query=" + textbox.value;
+
+								$.each(settings.params, function(key,value){
+									params+= "&" + key + "=" + value;
+								});
+
+							}	
+
 							$.ajax({
 
-								url: settings.ajaxurl,
+								url: settings.ajaxurl + params,
 								type: 'GET',
 								dataType: 'json',
 								success: function(response){
@@ -561,9 +575,22 @@
 					} 
 					// no data in store? check online
 					else {
+
+						var params = "";
+						if (settings.setparams === true) {
+
+							//compose the urls params
+							params+= "?query=" + textbox.value;
+
+							$.each(settings.params, function(key,value){
+								params+= "&" + key + "=" + value;
+							});
+
+						}						
+
 						$.ajax({
 
-							url: settings.ajaxurl,
+							url: settings.ajaxurl + params,
 							type: 'GET',
 							dataType: 'json',
 							success: function(response){
@@ -586,9 +613,21 @@
 				//there is no local storage, fetch data from the server
 				else {
 
+					var params = "";
+					if (settings.setparams === true) {
+
+						//compose the urls params
+						params+= "?query=" + textbox.value;
+
+						$.each(settings.params, function(key,value){
+							params+= "&" + key + "=" + value;
+						});
+
+					}
+
 					$.ajax({
 
-						url: settings.ajaxurl,
+						url: settings.ajaxurl + params,
 						type: 'GET',
 						dataType: 'json',
 						success: function(response){
