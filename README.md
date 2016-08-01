@@ -13,7 +13,7 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 * [Customize User Interface](#customizeable)
 * [Screenshots](#screenshots)
 
-## [Live Demo](https://GeoffreyOliver.github.io/jquery.autosuggest/index.html) ###
+## [Live Demo](https://geoffreybans.github.io/jquery.autosuggest/index.html) ###
 
 ## Example Usage ##
 
