@@ -17,7 +17,7 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 
 ## Example Usage ##
 
-The autosuggest plugin requires the the jquery library in order to function, being a jquery plugin that's kinda obvious.
+The autosuggest plugin requires the jquery library in order to function, being a jquery plugin that's kinda obvious.
 Load the jquery library first in this manner:
 
 ```javascript
