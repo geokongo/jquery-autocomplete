@@ -13,12 +13,12 @@ This jquery plugin provides suggestions in a dropdown list as the user types in 
 * [Customize User Interface](#customizeable)
 * [Screenshots](#screenshots)
 
-## [Live Demo](https://geoffreybans.github.io/jquery.autosuggest/index.html) ###
+## [Live Demo]https://geoffreybans.github.io/jquery.autosuggest/index.html) ###
 
 ## Example Usage ##
 
 The autosuggest plugin requires the jquery library in order to function, being a jquery plugin that's kinda obvious.
-Load the jquery library first in this manner:
+Load the jquery library first in this manner
 
 ```javascript
 <script type="text/javascript" src="scripts/js/jquery.min.js"></script> 
